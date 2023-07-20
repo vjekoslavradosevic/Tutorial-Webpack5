@@ -1,0 +1,109 @@
+==> INSTALACIJA
+--> npm install --save-dev webpack webpack-cli -> instalacija webpack i webpack-cli paketa (webpack-cli je paket za upravljanje webpackom kroz terminal)
+- oba paketa se instaliraju kao development paketi jer se oni ne koriste u fazi produkcije
+
+==> ZAŠTO KORISTIMO WEBPACK?
+- kada nebi koristili webpack:
+    - nebi mogli vlastite JavaScript module importati u glavne JavaScript datoteke pomoću naredbe import zato što je naredba import dio ES6 što je verzija JavaScripta koju preglednici ne podržavaju
+    - način na koji bi mogli raditi importanje je navoditi sve JavaScript datoteke jednu za drugom u glavnoj .html datoteci -> ovdje treba paziti na redoslijed referenciranja JavaScript skripti!
+    - također, bez korštenja webpacka naš JavaScript kod nebi bio optimiziran za minimalno trošenje memorije i najbržu izvedbu -> optimizacija bi se morala raditi ručno
+
+==> WEBPACK KONFIGURACIJSKA DATOTEKA
+- datoteka se zove webpack.config.js -> ovo je JavaScript datoteka, znači JavaScript kod
+- webpack.config.js exporta objekt koji sadrži konfiguracijske parametre:
+    ..> mode -> development ili production
+             -> source mape su moguće i u development i u production modu 
+             -> production mod generira izlazne datoteke manje veličine -> kod je maksimalno komprimiran (nema komentara, razmaka, imena varijabla iamju samo jedno slovo)
+                                                                        -> brže se preuzimaju internetom
+    ..> entry -> objekt koji sadrži parove: ime_izlazne_datoteke i putanja_do_ulazne_datoteke
+              -> ime izlazne datoteke ne mora odgovarati imenu ulazne datoteke
+    ..> output -> objekt koji sadrži lokaciju i ime izlazne datoteke
+    ..> module -> konfiguracija loadera 
+    ..> plugins -> konfiguracija pluginova
+    ..> devServer -> konfiguracija Webpack Dev Servera
+    ..> devtool -> konfiguracija Source mapa
+
+==> KORIŠTENJE
+- u package.json se dodaje skripta koja pokreće webpack (uglavnom se naziva "build" skripta)
+- proces rada webpacka:
+    1. webpack čita konfiguracijsku datoteku, saznaje gdje se nalaze ulazne datoteke
+    2. webpack prikuplja ulazne datoteke, prati sve njihove importe i sve skupa pakira u izlazne datoteke koje sprema u dist folder
+    3. webpack čita konfiguracijsku datoteku, saznaje gdje treba spremiti stvoreni dist folder
+    4. webpack sprema dist folder
+- automatizacija korištenja:
+    - kod svake promjene ulaznih datoteka, treba ponovno pokrenuti "build" skriptu da webpack napravi novi dist folder
+    - rješenje je korištenje "build" skripte --> webpack --watch
+    - pokretanje ove skripte pokreće webpack, ali se on nakon pakiranja ne gasi nego čeka promjene u bilo kojoj datoteci nakon čega odmah ponovno pokreće postupak pakiranja
+
+==> SOURCE MAPE
+- ako napravimo grešku u ulaznim datotekama koje webpack pakira u izlazne datoteke, kada prikažemo frontend, preglednik će grešku locirati u izlaznim webpack datotekama
+- grešku je jako teško ispraviti na temelju errora iz izlaznih datoteka jer je te datoteke generirao webpack 
+- source mape omogućuju da preglednik prikaže grešku iz izvornog koda tj. ulaznih datoteka koje smo mi pisali, a ne grešku iz webpack izlaznih datoteka
+- source mape ne pomažu samo kod lociranja grešaka nego lociraju i iz koje izvorne datoteke dolaze ispisi na browser konzolu
+- datoteka koja pohranjuje source mape se ne dohvaća sa poslužitelja klijentu sve dok klijent ne otvori browser dev-tools
+- korištenje source mapa:
+    1. --> devtool: "source-map" -> redak koji se dodaje u webpack.config.js
+    2. sada će se svakim pakiranjem u dist folder također dodati i .map.js datoteka koja mapira originalni kod na onaj u zapakiranoj izlaznoj datoteci
+    3. sada je moguće koristiti gore navedene funkcionalnosti source mapa
+
+==> LOADERI
+- webpack omogućuje korištenje loadera -> loaderi se instaliraju kao development paketi jer nam služe samo u fazi developmenta
+- loaderi služe za pakiranje statičkih resursa (npr. slika), .css (css-loader i style-loader) i .sass (sass-loader) datoteka itd.
+- loaderi se primjenjuju samo na određeni tip datoteka (za razliku od pluginova koji se primjenjuju na dist folder)
+- svi loaderi se konfiguriraju u datoteci webpack.config.js
+- zašto nam trebaju loaderi?
+    - webpack prilikom pakiranja ulaznih datoteka u obzir uzima glavne ulazne .js datoteke (čije su putanje navedene u webpack.config.js) i sve njihove importe 
+    - to znači da ako imamo npr. statičke resurse, njih webpack ne može pronaći jer nisu navedeni kao importi u tim .js datotekama
+    - kako bi webpack pronašao takve datoteke, one se također moraju navesti kao importi u glavnim ulaznim .js datotekama
+    - kako bi webpack mogao prepoznati, obraditi i zapakirati takve importe, treba konfigurirati odgovarajuće loadere za te importe
+- loaderi za pakiranje statičkih resursa:
+    - loader za statičke resurse je unaprijed ugrađen u webpack, ne mora se dodatno instalirati
+    - sada će se svi pronađeni statički resursi zapakirati i dodati u dist folder
+- loaderi za pakiranje CSS datoteka:
+    - loader za pakiranje .css datoteka zahtjeva instaliranje dva NPM paketa: css-loader i style-loader --> npm install -save-dev style-loader css-loader
+    - css-loader:
+        - zadužen za parsiranje i importanje CSS datoteka u JavaScript datoteke -> ovaj loader se aktivira prvi
+    - style-loader:
+        - zadužen za dodavanje i ugradnju tih importa u HTML datoteke -> ovaj loader se aktivira drugi
+        - style-loader neće napraviti nove .css datoteke nego će sav CSS ostati u .js datotekama -> zbog toga generirana .html datoteka treba uključiti samo izlaznu .js datoteku (jer je u njoj sav CSS)
+        - ako želimo zapakirani CSS spremiti u zasebne datoteke, moramo koristiti Mini Css Extract Plugin
+- loaderi za pakiranje SASS datoteka:
+    - pakiranje SASS datoteka zahtjeva tri loadera: style-loader, css-loader i sass-loader --> npm install -save-dev style-loader css-loader sass-loader 
+    - sass-loader je zadužen za pretvaranje .scss datoteka u .css datoteke -> ovaj loader se aktivira prvi
+    - daljnja aktivacija loadera je ista kao i za .css datoteke
+
+==> PLUGINOVI
+- pluginovi su webpack alati koji se za razliku od loadera ne primjenju na specifične datoteke, nego na cjelokupni dist folder
+- pluginovi se, kao i loaderi, instaliraju kao development NPM paketi jer nam trebaju samo u fazi developmenta
+- HTML Webpack Plugin:
+    - webpack izlazne datoteke sprema u dist folder koji se može brisati, a webpack će ga stvoriti ako ne postoji prilikom pakiranja ulaznih datoteka
+    - u dist folderu nam se nalazi izlazna .js datoteka koja sadrži CSS -> u dist folder bi također htjeli spremiti i HTML datoteke da sve bude u istom folderu spremno za deployment
+    - ako u dist folderu želimo imati .html datoteke, svakim stvaranjem dist foldera ponovno ćemo morati napisati .html datoteke jer će one biti obrisane zajedno sa dist folderom, ali naknadno neće biti stvorene
+    - rješenje je korištenje plugina HTML Webpack Plugin -> on će svakim osvježavanjem/stvaranjem dist foldera, napraviti HTML datoteku u koju će se automatski uključiti sve ostale datoteke iz dist foldera
+    - problem nastaje zato što tako generirana HTML datoteka neće imati nikakav sadržaj, osim defaultnog zaglavlja i importa ostalih datoteka iz dist foldera
+    - problem se rješava konfiguracijom HTML Webpack Plugina -> stvara se template.html datoteka na temelju koje će webpack svaki puta generirati .html datoteku koja će imati sadržaj iz template.html datoteke
+    - ovime smo ostvarili to da se sada svakim stvaranjem dist foldera, unutar njega stvara i HTML datoteka koja automatski u HTML uključuje sve ostale datoteke iz dist foldera, a ta HTML datoteka ima isti sadržaj kao i naša template.html datoteka
+    - generiranje više HTML datoteka u dist folderu:
+        - instanciranje jednog HTML Webpack Plugina, kao i njegovo konfiguriranje, odnose se samo na jednu HTML datoteku koju želimo automatizirano stvoriti 
+        - ako želimo stvarati više HTML datoteka, moramo više puta instancirati i konfigurirati HTML Webpack Plugine
+        - ako u konfiguraciji HTML Webpack Plugina ne navedemo koje .js datoteke treba uključiti, onda će ta HTML stranica uključiti sve .js datoteke iz dist foldera 
+        - zbog toga se koriste "chunks" liste u kojima se navodi koje .js datoteke treba at HTML datoteka uključiti
+- Mini Css Extract Plugin:
+    - koristi se umjesto style-loadera koji bi CSS kod zapakirao zajedno sa JavaScript kodom u .js datoteke 
+    - ovaj će plugin svaku .css datoteku koju pakira, zapakirati u vlastitu .css datoteku unutar dist foldera
+- Bundle Analyzer Plugin:
+    - plugin daje pregled cijelog paketa kojeg je napravio webpack
+
+==> WEBPACK DEV SERVER
+- webpack dev server je frontend development server:
+    - služi za prikazivanje frontenda web-aplikacije (slično kao live server)
+    - za testiranje frontenda web-apllikacije bolje je koristiti frontend development server nego posluživati resurse protokolom "file" sa vlastitog računala zato što protokolom "file" resursi ne putuju preko mreže i nemožemo tako testirati brzinu web-aplikacije
+    - frontend development server ne može posluživati backend resurse (npr. API-je)
+    - zbog toga za vrijeme izrade frontenda i backenda, trebaju nam dva development servera -> jedan za frontend (npr. webpack dev server) i jedan za backend
+    - u fazi produkcije više se ne koristi frontend development server nego se svi resursi poslužuju sa backend servera
+- konfiguracija webpack dev servera također se sprema u webpack.config.js konfiguracijsku datoteku
+- u konfiguraciji se predaje putanja do dist foldera (folder u koji je webpack spremio sve izlazne datoteke) -> webpack dev server mora posluživati sve datoteke koje se nalaze u tom folderu
+- dodatne mogućnosti dev servera:
+    ..> port - odabir porta na kojem će server posluživati datoteke
+    ..> open - otvaranje preglednika čim se pokrene dev server
+    ..> hot - ponovno pakiranje datoteka i pokretanje servera na svaku spremljenu promjenu izlaznih webpack datoteka ("hot reload")
