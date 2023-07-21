@@ -34,6 +34,7 @@
     - kod svake promjene ulaznih datoteka, treba ponovno pokrenuti "build" skriptu da webpack napravi novi dist folder
     - rješenje je korištenje "build" skripte --> webpack --watch
     - pokretanje ove skripte pokreće webpack, ali se on nakon pakiranja ne gasi nego čeka promjene u bilo kojoj datoteci nakon čega odmah ponovno pokreće postupak pakiranja
+    - ova skripta koja ima zastavicu --watch se NE SMIJE koristiti u produkciji zato jer se webpack treba pokrenuti samo jednom i nakon toga ugasiti -> ne smije čekati nove promjene jer se one neće dogoditi
 
 ==> SOURCE MAPE
 - ako napravimo grešku u ulaznim datotekama koje webpack pakira u izlazne datoteke, kada prikažemo frontend, preglednik će grešku locirati u izlaznim webpack datotekama

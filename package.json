@@ -4,7 +4,9 @@
     "description": "webpack tutorial",
     "main": "index.js",
     "scripts": {
-        "build": "webpack --watch",
+        "build:prod": "npm install && npm run build",
+        "build:watch": "webpack --watch",
+        "build": "webpack",
         "start": "webpack serve"
     },
     "keywords": [
@@ -14,6 +16,9 @@
     "author": "Vjekoslav Radošević",
     "license": "ISC",
     "devDependencies": {
+        "@babel/core": "^7.22.9",
+        "@babel/preset-env": "^7.22.9",
+        "babel-loader": "^9.1.3",
         "css-loader": "^6.8.1",
         "html-webpack-plugin": "^5.5.3",
         "mini-css-extract-plugin": "^2.7.6",
@@ -26,9 +31,6 @@
         "webpack-dev-server": "^4.15.1"
     },
     "dependencies": {
-        "@babel/core": "^7.22.9",
-        "@babel/preset-env": "^7.22.9",
-        "axios": "^1.4.0",
-        "babel-loader": "^9.1.3"
+        "axios": "^1.4.0"
     }
 }
