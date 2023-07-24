@@ -1,16 +1,19 @@
-name: CI
-on: [push]
+name: CI # ime workflowa
+on: [push] # okidac kada se pokrece workflow
 jobs: 
-  general:
-    name: Linting and Testing
-    runs-on: ubuntu-latest
+  job1:
+    name: Linting and Testing # ime posla
+    runs-on: ubuntu-latest # virtualni kontejner na kojem se github izvesti sve poslove
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2 
 
       - name: Install packages
-        run: npm ci
+        run: npm ci # npm ci je brza verzija naredbe "npm i" specificna za izvodenje u CI pipelineu
 
       - name: Run ESlint
-        run: npm run lint
+        run: npm run ci:lint
+      
+      - name: Run Tests
+        run: npm run ci:test
