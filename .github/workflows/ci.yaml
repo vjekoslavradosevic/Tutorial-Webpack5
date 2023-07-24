@@ -3,17 +3,21 @@ on: [push] # okidac kada se pokrece workflow
 jobs: 
   job1:
     name: Linting and Testing # ime posla
-    runs-on: ubuntu-latest # virtualni kontejner na kojem se github izvesti sve poslove
+    runs-on: ubuntu-latest # virtualni kontejner na kojem ce github izvesti sve poslove
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2 
 
-      - name: Install packages
+        uses: actions/setup-node@v2 # postavljanje verzije Node.js-a koju će koristiti virtualni kontejner na konkretnu lokalnu verziju Node.js-a koja je koristena za izradu projekta
+        with:
+          node-version: "18.16.1" # lokalna verzija Node.js-a koristena za izradu projekta
+
+      - name: Install packages # na virtualnom kontejneru prvo treba instalirati sve ovisnosti/pakete da bi se kod mogao sintaksno provjeriti i testirati
         run: npm ci # npm ci je brza verzija naredbe "npm i" specificna za izvodenje u CI pipelineu
 
-      - name: Run ESlint
+      - name: Run ESlint # provjera sintakse
         run: npm run ci:lint
       
-      - name: Run Tests
+      - name: Run Tests # pokretanje testova
         run: npm run ci:test
