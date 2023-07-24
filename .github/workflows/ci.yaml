@@ -9,6 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2 
 
+      - name: Setup Node
         uses: actions/setup-node@v2 # postavljanje verzije Node.js-a koju će koristiti virtualni kontejner na konkretnu lokalnu verziju Node.js-a koja je koristena za izradu projekta
         with:
           node-version: "18.16.1" # lokalna verzija Node.js-a koristena za izradu projekta
