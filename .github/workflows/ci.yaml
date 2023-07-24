@@ -22,3 +22,6 @@ jobs:
       
       - name: Run Tests # pokretanje testova
         run: npm run ci:test
+
+      - name: Build and Output # pakiranje projekta
+        run: npm run jaje --if-present # --if-present je zastavica koja omogućuje graceful failure ako ne postoji build skripta tj. ako se ne koristi alat za pakiranje
