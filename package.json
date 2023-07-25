@@ -11,7 +11,8 @@
         "lint:fix": "eslint . --fix",
         "ci:lint": "eslint .",
         "test": "jest --watch",
-        "ci:test": "jest"
+        "ci:test": "jest",
+        "ci:lighthouse": "lhci autorun"
     },
     "keywords": [
         "webpack",
@@ -22,6 +23,7 @@
     "devDependencies": {
         "@babel/core": "^7.22.9",
         "@babel/preset-env": "^7.22.9",
+        "@lhci/cli": "^0.12.0",
         "babel-loader": "^9.1.3",
         "css-loader": "^6.8.1",
         "eslint": "^8.45.0",

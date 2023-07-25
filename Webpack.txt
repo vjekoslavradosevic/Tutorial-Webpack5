@@ -10,6 +10,7 @@
 
 ==> WEBPACK KONFIGURACIJSKA DATOTEKA
 - datoteka se zove webpack.config.js -> ovo je JavaScript datoteka, znači JavaScript kod
+- webpack.config.js koristi staru JavaScript sintaksu jer iako webpack (koristeći Babel) pretvara novu sintaksu u staru, to ne radi za svoju konfiguracijsku datoteku
 - webpack.config.js exporta objekt koji sadrži konfiguracijske parametre:
     ..> mode -> development ili production
              -> source mape su moguće i u development i u production modu 

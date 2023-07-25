@@ -25,3 +25,6 @@ jobs:
 
       - name: Build and Output # pakiranje projekta
         run: npm run build --if-present # --if-present je zastavica koja omogućuje graceful failure ako ne postoji build skripta tj. ako se ne koristi alat za pakiranje
+
+      - name: Lighthouse Benchmarks
+        run: npm run ci:lighthouse
