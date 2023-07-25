@@ -22,7 +22,7 @@ module.exports = {
     parserOptions: {
         ecmaVersion: "latest",
     },
-    ignorePatterns: ["webpack.config.js", "*.txt"], // ignorira datoteku webpack.config.js i sve tekstualne datoteke
+    ignorePatterns: ["*.txt"], // ignorira sve tekstualne datoteke
     rules: {
         // 0 = off, 1 = warn, 2 = error
         "no-unused-vars": [1, { vars: "all", args: "after-used", ignoreRestSiblings: false }],

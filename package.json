@@ -8,8 +8,8 @@
         "build:watch": "webpack --watch",
         "build": "webpack",
         "start": "webpack serve",
-        "lint:fix": "eslint . --fix",
-        "ci:lint": "eslint .",
+        "lint:fix": "eslint ./src --fix",
+        "ci:lint": "eslint ./src",
         "test": "jest --watch",
         "ci:test": "jest",
         "ci:lighthouse": "lhci autorun"
