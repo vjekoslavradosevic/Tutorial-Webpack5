@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin"); //generiranje HTML dat
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //bundle analiza u pregledniku
 
 module.exports = {
-    mode: "development", //production (default) ili development
+    mode: "production", //production (default) ili development
     entry: {
         bundle: path.resolve(__dirname, "src/js/index.js"),
         //par ime_izlazne_datoteke - putanja_do_ulazne_datoteke
