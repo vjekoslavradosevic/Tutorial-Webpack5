@@ -2,7 +2,7 @@ name: CI # ime workflowa
 on: [push] # okidac kada se pokrece workflow
 jobs: 
   job1:
-    name: Linting and Testing # ime posla
+    name: Linting, Testing, Bundling, Lighthouse # ime posla
     runs-on: ubuntu-latest # virtualni kontejner na kojem ce github izvesti sve poslove
 
     steps:
