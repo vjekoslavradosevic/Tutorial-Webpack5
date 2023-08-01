@@ -11,4 +11,3 @@ const jokeBtn = document.getElementById("jokeBtn");
 jokeBtn.addEventListener("click", generateJoke);
 
 generateJoke();
-console.log("Testiranje potrosnje.");
